@@ -1,0 +1,89 @@
+.data
+boasvindas: 	.asciiz "\n Calculadora Basica - by Rhuan Cruz"
+prompt_num1:		.asciiz "\n Digite um numero inteiro:"
+prompt_num2:		.asciiz "\n Digite outro numero inteiro:"
+prompt_op:	.asciiz	"\n Escolha a operação: \n 1- soma\n 2- subtrair \n 3- multiplicar \n 4- dividir"	
+prompt_soma:	.asciiz "\n A soma dos dois numeros �:"
+prompt_sub:	.asciiz "\n A subtração dos dois numeros �:"
+prompt_mul:	.asciiz "\n A multiplicação dos dois numeros �:"
+prompt_div:	.asciiz "\n A divisão dos dois numeros �:"
+resultado: .word 0
+.text	
+main:
+li $s1, 1
+li $s2, 2
+li $s3, 3
+li $s4, 4
+#exibe mensagem do primeiro numero
+li $v0, 4
+la $a0, prompt_num1
+syscall
+
+#ler num1
+li $v0, 5
+syscall
+move $t0, $v0 # armazena o num1 em $t0
+
+#exibe mensagem do segundo numero
+li $v0, 4
+la $a0, prompt_num2
+syscall
+
+#ler num2
+li $v0, 5
+syscall
+move $t1, $v0 # armazena o num2 em $t1
+
+#exibe mensagem da operação desejada
+li $v0,4
+la $a0, prompt_op
+syscall
+
+#ler numero op
+li $v0, 5
+syscall
+move $t2, $v0 # guarda o numero da op em $t2
+
+beq  $s1,$t2, somar # se for 1 pula pra soma
+beq  $s2,$t2, subtrair # se for 2 pula pra sub
+beq  $s3,$t2, multiplicar # se for 3 pula pra mult
+#beq  $s4,$t2, dividir # se for 4 pula pra div
+
+#funçao somar
+somar:
+add $t7, $t0, $t1 # faz a soma
+
+li $v0, 4
+la $a0, prompt_soma
+syscall
+sw  $t7, resultado # armazena o resultado em $a0
+li $v0,1
+j fim
+
+#função subtrair
+subtrair:
+sub  $t7, $t0, $t1 # faz a sub
+
+li $v0, 4
+la $a0, prompt_sub
+syscall
+sw  $t7, resultado # armazena o resultado em $a0
+li $v0, 1
+j fim
+
+multiplicar:
+mul $t7, $t0, $t1 # faz a mult
+
+li $v0, 4
+la $a0, prompt_mul
+syscall
+sw  $t7, resultado
+li $v0,1
+j fim
+
+
+
+
+fim:
+li $v0, 10
+	syscall
